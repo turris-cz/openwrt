@@ -293,7 +293,7 @@ endef
 define KernelPackage/p54-usb
   $(call KernelPackage/p54/Default)
   TITLE+= (USB)
-  DEPENDS+= @USB_SUPPORT +kmod-usb-core +kmod-p54-common +p54-usb-firmware
+  DEPENDS+= @!(TARGET_mpc85xx) @USB_SUPPORT +kmod-usb-core +kmod-p54-common +p54-usb-firmware
   FILES:=$(PKG_BUILD_DIR)/drivers/net/wireless/intersil/p54/p54usb.ko
   AUTOLOAD:=$(call AutoProbe,p54usb)
 endef
