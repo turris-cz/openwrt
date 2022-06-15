@@ -152,6 +152,10 @@ ifneq ($(GCC_ARCH),)
   GCC_CONFIGURE+= --with-arch=$(GCC_ARCH)
 endif
 
+ifdef CONFIG_powerpc
+  GCC_CONFIGURE+= --with-cpu=$(CONFIG_CPU_TYPE)
+endif
+
 ifeq ($(CONFIG_arm),y)
   GCC_CONFIGURE+= \
 	--with-cpu=$(word 1, $(subst +," ,$(CONFIG_CPU_TYPE)))
