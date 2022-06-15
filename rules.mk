@@ -91,7 +91,10 @@ ifneq ($(filter -march=armv%,$(TARGET_OPTIMIZATION)),)
   GCC_ARCH:=$(patsubst -march=%,%,$(filter -march=armv%,$(TARGET_OPTIMIZATION)))
 endif
 ifdef CONFIG_HAS_SPE_FPU
+ifndef CONFIG_SOFT_FLOAT
+  # suffix 'spe' enables hardware floating point support
   TARGET_SUFFIX:=$(TARGET_SUFFIX)spe
+endif
 endif
 ifdef CONFIG_MIPS64_ABI
   ifneq ($(CONFIG_MIPS64_ABI_O32),y)
@@ -224,6 +227,18 @@ else
   SOFT_FLOAT_CONFIG_OPTION:=
   ifeq ($(CONFIG_arm),y)
     TARGET_CFLAGS+= -mfloat-abi=hard
+  endif
+  ifdef CONFIG_HAS_SPE_FPU
+    # -mabi=spe -mspe is required on e500v1 and e500v2 cores for proper hardware floating point support
+    TARGET_CFLAGS+= -mabi=spe -mspe
+  endif
+  ifeq ($(CONFIG_CPU_TYPE),"8540")
+    # cpu type 8540 (e500v1 core) has hardware SPE support only for single precision floats
+    TARGET_CFLAGS+= -mfloat-gprs=single
+  endif
+  ifeq ($(CONFIG_CPU_TYPE),"8548")
+    # cpu type 8548 (e500v2 core) has hardware SPE support also for double precision floats
+    TARGET_CFLAGS+= -mfloat-gprs=double
   endif
 endif
 

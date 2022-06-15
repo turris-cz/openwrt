@@ -154,6 +154,19 @@ endif
 
 ifdef CONFIG_powerpc
   GCC_CONFIGURE+= --with-cpu=$(CONFIG_CPU_TYPE)
+  ifndef CONFIG_SOFT_FLOAT
+    ifdef CONFIG_HAS_SPE_FPU
+      # --enable-obsolete is required since gcc-8 for cpu type 8540 and 8548 with floating point support
+      GCC_CONFIGURE+= --enable-obsolete
+    endif
+    ifeq ($(CONFIG_CPU_TYPE),"8548")
+      # cpu type 8548 is e500v2 core (e500 with double precision floating point support)
+      GCC_CONFIGURE+= --enable-e500-double
+      # --with-long-double-128 which enables long double support is disabled for now because
+      # musl libc does not support this kind of IBM long double format (mantisa with 106 bits)
+      #GCC_CONFIGURE+= --with-long-double-128
+    endif
+  endif
 endif
 
 ifeq ($(CONFIG_arm),y)
