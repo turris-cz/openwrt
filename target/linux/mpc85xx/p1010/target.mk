@@ -1,3 +1,4 @@
+CPU_TYPE:=8548
 BOARDNAME:=P1010
 KERNELNAME:=simpleImage.tl-wdr4900-v1
 

@@ -1,3 +1,4 @@
+CPU_TYPE:=8548
 BOARDNAME:=P1020
 
 define Target/Description
